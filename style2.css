@@ -48,6 +48,30 @@ body {
     background-color: #666;
 }
 
+.pageBlock {
+    width: 210mm;
+    height: 297mm;
+    box-sizing: border-box;
+    page-break-after: auto;
+    padding: 5mm;
+    margin:auto;
+}
+
+    /* 画面表示では非表示 */
+    .print-image {
+        display: none;
+    }
+
+    /* 印刷時のみ表示 */
+    @media print {
+        .print-image {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+    }
+
+
 @media screen and (max-width: 768px) {
     .titles h1 {
         font-size: 2rem;

@@ -14,7 +14,7 @@
     <nav class="gnav">
         <ul class="menu">
             <li><a href="https://instagram.com/johnouchi._.seitokai" class="btn" target="_blank">生徒会公式Instagram</a></li>
-            <li><a href="https://marshmallow-qa.com/dyx8h6a2cpkmdne?t=0dRkSQ" class="btn"target="_blank">ご意見マシュマロ</a></li>
+            <li><a href="https://marshmallow-qa.com/dyx8h6a2cpkmdne?t=0dRkSQ" class="btn" target="_blank">ご意見マシュマロ</a></li>
         </ul>
     </nav>
 </header>
@@ -29,58 +29,80 @@
 <div class="questions">
     <h2>以下質問にお答えいたします。ご意見に関しましては後日代議委員会にて協議の上改めて結果を掲載いたします。更新日時は最終更新日時をご覧ください。</h2>
 </div>
-<div class="questions">
-    <h4 class="question">Q1.表彰は各競技ありますか。</h4>
-    <h4 class="answer">A1.はい。あります。1~3位まで表彰予定です。（学年集会にて）</h4>
+
+<!-- 印刷対象エリア -->
+<div class="print_area">
+
+    <div class="questions">
+        <h4 class="question">Q1.表彰は各競技ありますか。</h4>
+        <h4 class="answer">A1.はい。あります。1~3位まで表彰予定です。（学年集会にて）</h4>
+    </div>
+    <div class="questions">
+        <h4 class="question">Q2.けが人が出にくくなり、レベルの高い試合が期待できるためサッカーのトレシューありにしてください。</h4>
+        <h4 class="answer">A2.運営にて協議させていただきます。</h4>
+    </div>
+    <div class="questions">
+        <h4 class="question">Q3.バド部員が散らばってはいけないとのことですが１チームだけ作る場合何人までバド部員は入れれますか。</h4>
+        <h4 class="answer">A3.3人までとなっています(仮ルールより)</h4>
+    </div>
+    <div class="questions">
+        <h4 class="question">Q4.サッカー部制限はもうけないと試合にならないと思います。</h4>
+        <h4 class="answer">A4.運営にて協議させていただきます。</h4>
+    </div>
+
+    <!-- 追加する画像　印刷時のみ表示 -->
+    <div class="print-image">
+        <img src="image.png" alt="参考画像" style="width:100%; max-width:200px;">
+    </div>
 </div>
-<div class="questions">
-    <h4 class="question">Q2.けが人が出にくくなり、レベルの高い試合が期待できるためサッカーのトレシューありにしてください。</h4>
-    <h4 class="answer">A2.代議委員会にて協議させていただきます。</h4>
-</div>
-<div class="questions">
-    <h4 class="question">Q3.バド部員が散らばってはいけないとのことですが１チームだけ作る場合何人までバド部員は入れれますか。</h4>
-    <h4 class="answer">A3.3人までとなっています(仮ルールより)</h4>
-</div>
-<div class="questions">
-    <h4 class="question">Q4.サッカー部制限はもうけないと試合にならないと思います。</h4>
-    <h4 class="answer">A4.代議委員会にて協議させていただきます。</h4>
-</div>
-    <button id="downloadExcel">Excelに出力</button>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+<button onclick="printSelectedContent()">PDFとして印刷</button>
+<p>↑pdfは、教室掲示等にご活用ください。↑</p>
 
 <script>
-document.getElementById("downloadExcel").addEventListener("click", function() {
-    
-    let questions = document.querySelectorAll(".question");
-    let answers = document.querySelectorAll(".answer");
- // Excelのデータ構造を作成
-    let data = [["質問", "回答"]]; // ヘッダー行
+    function printSelectedContent() {
+        // クラス名から印刷対象の要素を取得
+        const content = document.querySelector(".print_area").innerHTML;
 
-    // Qn, An を1つずつ取得して配列に追加
-    questions.forEach((q, index) => {
-        let questionText = q.textContent;
-        let answerText = answers[index] ? answers[index].textContent : ""; // Aがない場合空欄
-        data.push([questionText, answerText]);
-    });
+        // 新しいウィンドウを作成
+        const printWindow = window.open("", "", "width=800,height=600");
 
-    // ワークシートを作成
-    let ws = XLSX.utils.aoa_to_sheet(data);
+        // 印刷用の HTML を生成
+        printWindow.document.write(`
+            <!DOCTYPE html>
+            <html lang="ja">
+            <head>
+                <meta charset="UTF-8">
+                <title>印刷プレビュー</title>
+                <style>
+                    body { font-family: Arial, sans-serif; text-align: center; }
+                    img { display: block; margin: 20px auto; max-width: 600px; width: 100%; }
+                </style>
+            </head>
+            <body>
+                ${content}
+                <script>
+                    window.onload = function() {
+                        window.print();
+                        window.onafterprint = function() { window.close(); };
+                    };
+                <\/script>
+            </body>
+            </html>
+        `);
 
-    // 新しいワークブックを作成
-    let wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "質問回答");
-
-    // Excelファイルを作成してダウンロード
-    XLSX.writeFile(wb, "Qn_An.xlsx");
-});
+        // ドキュメントを閉じる
+        printWindow.document.close();
+    }
 </script>
-        
+
 <p>最終更新日: <span id="lastModified"></span></p>
 <script>
     document.getElementById("lastModified").textContent = document.lastModified;
 </script>
-<p>※レスポンシブ対応しておりますが、スマホでの動作を考えたレイアウトなのでPCではみえにくいと思います。ご了承ください。</p>
-<p>allrights reserved hakubishin1101</p>
-<p>E-mail:johnouchi.contact@gmail.com担当:古津</p>
+<p>※レスポンシブ対応しておりますが、スマホでの動作を考えたレイアウトなのでPCではみづらいと思います。ご了承ください。</p>
+<p>all rights reserved hakubishin1101</p>
+<p>E-mail: johnouchi.contact@gmail.com 担当: 古津</p>
+
 </body>
 </html>
